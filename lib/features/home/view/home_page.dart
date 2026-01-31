@@ -12,7 +12,6 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(AppStrings.homeAppBarTitle),
-        elevation: 2,
         actions: [
           PopupMenuButton<String>(
             icon: const Icon(Icons.sort),
