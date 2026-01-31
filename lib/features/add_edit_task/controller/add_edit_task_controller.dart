@@ -1,8 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_todolist_app/core/models/task.dart';
+import 'package:flutter_todolist_app/core/services/database_service.dart';
 import 'package:get/get.dart';
 
 class AddEditTaskController extends GetxController {
+  final DatabaseService _databaseService;
+  AddEditTaskController(this._databaseService);
+
   final Task? task = Get.arguments is Task ? Get.arguments : null;
 
   final formKey = GlobalKey<FormState>();
@@ -16,11 +20,15 @@ class AddEditTaskController extends GetxController {
   );
   final hasReminder = false.obs;
 
+  final isLoading = false.obs;
+
   @override
   void onInit() {
     super.onInit();
     titleController = TextEditingController(text: task?.title ?? '');
-    descriptionController = TextEditingController(text: task?.description ?? '');
+    descriptionController = TextEditingController(
+      text: task?.description ?? '',
+    );
 
     selectedPriority.value = task?.priority ?? 2;
     selectedDueDate.value =
@@ -36,17 +44,33 @@ class AddEditTaskController extends GetxController {
 
   void updateDueDate(DateTime date) => selectedDueDate.value = date;
 
-  Future<void> saveTask() async {
-    if (formKey.currentState!.validate()) {
-      final newTask = Task(
-        id: task?.id, // Keep ID if editing
-        title: titleController.text.trim(),
-        description: descriptionController.text.trim(),
-        priority: selectedPriority.value,
-        dueDate: selectedDueDate.value,
-        hasReminder: hasReminder.value,
-      );
+  Future<bool> saveTask() async {
+    if (!formKey.currentState!.validate()) return false;
+
+    isLoading.value = true;
+
+    final newTask = Task(
+      id: task?.id,
+      title: titleController.text.trim(),
+      description: descriptionController.text.trim(),
+      priority: selectedPriority.value,
+      dueDate: selectedDueDate.value,
+      hasReminder: hasReminder.value,
+    );
+
+    try {
+      if (isEditing) {
+        await _databaseService.updateTask(newTask);
+      } else {
+        await _databaseService.createTask(newTask);
+      }
+
+      return true;
+    } catch (_) {
+    } finally {
+      isLoading.value = false;
     }
+    return false;
   }
 
   @override

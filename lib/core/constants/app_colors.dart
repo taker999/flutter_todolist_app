@@ -13,6 +13,7 @@ class AppColors {
   static final lightGrey = Colors.grey.shade100;
 
   static final borderBlue = Colors.blue.shade700;
+  static final borderBlueLight = Colors.blue.shade300;
   static final borderGrey = Colors.grey.shade700;
   static final borderGreyLight = Colors.grey.shade300;
 

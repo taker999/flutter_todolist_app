@@ -135,15 +135,31 @@ class AddEditTaskPage extends GetView<AddEditTaskController> {
         SizedBox(
           width: double.infinity,
           height: 40.h,
-          child: ElevatedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.save),
-            label: Text(
-              controller.isEditing
-                  ? AppStrings.updateButtonText
-                  : AppStrings.createButtonText,
-            ),
-          ),
+          child: Obx(() {
+            final isLoading = controller.isLoading.value;
+
+            return ElevatedButton.icon(
+              onPressed:
+                  isLoading
+                      ? null
+                      : () async {
+                        final isSaved = await controller.saveTask();
+
+                        if (isSaved) {
+                          Get.back();
+                        }
+                      },
+              icon: isLoading ? null : const Icon(Icons.save),
+              label:
+                  isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : Text(
+                        controller.isEditing
+                            ? AppStrings.updateButtonText
+                            : AppStrings.createButtonText,
+                      ),
+            );
+          }),
         ),
 
         // if (controller.isEditing) ...[

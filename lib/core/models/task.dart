@@ -1,11 +1,12 @@
+import 'package:flutter_todolist_app/core/enums/priority.dart';
 import 'package:hive/hive.dart';
 
 part 'task.g.dart';
 
 @HiveType(typeId: 0)
-class Task extends HiveObject {
+class Task {
   @HiveField(0)
-  int? id;
+  String? id;
 
   @HiveField(1)
   final String title;
@@ -40,7 +41,7 @@ class Task extends HiveObject {
   }) : createdAt = createdAt ?? DateTime.now();
 
   Task copyWith({
-    int? id,
+    String? id,
     String? title,
     String? description,
     int? priority,
@@ -65,13 +66,13 @@ class Task extends HiveObject {
   String get priorityText {
     switch (priority) {
       case 1:
-        return 'High';
+        return Priority.high.name.toUpperCase();
       case 2:
-        return 'Medium';
+        return Priority.medium.name.toUpperCase();
       case 3:
-        return 'Low';
+        return Priority.low.name.toUpperCase();
       default:
-        return 'Medium';
+        return Priority.medium.name.toUpperCase();
     }
   }
 
