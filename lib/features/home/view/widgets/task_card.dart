@@ -4,10 +4,11 @@ import 'package:flutter_todolist_app/core/constants/app_colors.dart';
 import 'package:flutter_todolist_app/core/models/task.dart';
 import 'package:flutter_todolist_app/core/routes/route_names.dart';
 import 'package:flutter_todolist_app/core/widgets/custom_text_widget.dart';
+import 'package:flutter_todolist_app/features/home/controller/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class TaskCard extends StatelessWidget {
+class TaskCard extends GetView<HomeController> {
   const TaskCard({super.key, required this.task, required this.priorityColor});
 
   final Task task;
@@ -68,6 +69,8 @@ class TaskCard extends StatelessWidget {
                 maxLines: 2,
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w400,
+                decoration:
+                    task.isCompleted ? TextDecoration.lineThrough : null,
               ),
 
               SizedBox(height: 8.h),
@@ -151,12 +154,18 @@ class TaskCard extends StatelessWidget {
             PopupMenuItem(
               child: Row(
                 children: [
-                  Icon(Icons.edit, size: 20.r),
+                  Icon(task.isCompleted ? Icons.undo : Icons.done, size: 20.r),
                   SizedBox(width: 8.w),
-                  const CustomTextWidget('Edit'),
+                  CustomTextWidget(
+                    task.isCompleted
+                        ? 'Mark as Incomplete'
+                        : 'Mark as Completed',
+                  ),
                 ],
               ),
-              onTap: () {},
+              onTap: () {
+                controller.toggleTaskCompletion(task);
+              },
             ),
             PopupMenuItem(
               child: Row(
@@ -166,7 +175,9 @@ class TaskCard extends StatelessWidget {
                   const CustomTextWidget('Delete', color: AppColors.primaryRed),
                 ],
               ),
-              onTap: () {},
+              onTap: () {
+                controller.deleteTask(task.id!);
+              },
             ),
           ],
     );

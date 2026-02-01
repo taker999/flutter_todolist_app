@@ -16,10 +16,6 @@ class DatabaseService extends GetxService {
     return savedTask;
   }
 
-  Task? readTask(String id) {
-    return taskBox.get(id);
-  }
-
   List<Task> readAllTasks() {
     return taskBox.values.toList();
   }
@@ -28,11 +24,7 @@ class DatabaseService extends GetxService {
     await taskBox.put(task.id, task);
   }
 
-  Future<void> deleteTask(String id) async {
+  Future<void> deleteTask(int id) async {
     await taskBox.delete(id);
-  }
-
-  bool taskExists(String id) {
-    return taskBox.containsKey(id);
   }
 }

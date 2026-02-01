@@ -179,25 +179,4 @@ class NotificationService extends GetxService {
       );
     }
   }
-
-  Future<void> checkOverdueTasks(List<Task> tasks) async {
-    try {
-      for (var task in tasks) {
-        if (task.isOverdue && !task.isCompleted) {
-          await showInstantNotification(
-            'Overdue Task: ${task.title}',
-            'This task was due on ${task.dueDate.toString().split('.')[0]}',
-          );
-        }
-      }
-    } catch (e, stackTrace) {
-      log(
-        'Error checking overdue tasks',
-        name: 'NotificationService',
-        error: e,
-        stackTrace: stackTrace,
-        level: 1000,
-      );
-    }
-  }
 }

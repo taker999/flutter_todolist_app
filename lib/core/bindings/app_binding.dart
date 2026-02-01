@@ -23,14 +23,8 @@ class AppBinding extends Bindings {
 
     Get.lazyPut<TaskPreferencesService>(() => TaskPreferencesService(prefsBox));
 
-    Get.putAsync<NotificationService>(() async {
-      final service = NotificationService(notificationPlugin);
-
-      // Check overdue tasks
-      final tasks = Get.find<DatabaseService>().readAllTasks();
-      await service.checkOverdueTasks(tasks);
-
-      return service;
-    });
+    Get.lazyPut<NotificationService>(
+      () => NotificationService(notificationPlugin),
+    );
   }
 }

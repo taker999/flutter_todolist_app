@@ -1,16 +1,19 @@
 import 'package:flutter_todolist_app/core/enums/sort_by.dart';
 import 'package:flutter_todolist_app/core/models/task.dart';
 import 'package:flutter_todolist_app/core/services/database_service.dart';
+import 'package:flutter_todolist_app/core/services/notification_service.dart';
 import 'package:flutter_todolist_app/core/services/task_preferences_service.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 
 class HomeController extends GetxController {
   final DatabaseService databaseService;
+  final NotificationService notificationService;
   final TaskPreferencesService taskPreferencesService;
 
   HomeController({
     required this.databaseService,
+    required this.notificationService,
     required this.taskPreferencesService,
   });
 
@@ -41,6 +44,23 @@ class HomeController extends GetxController {
   void loadTasks() {
     tasks.value = databaseService.readAllTasks();
     _applySortFilter();
+  }
+
+  Future<void> toggleTaskCompletion(Task task) async {
+    final updatedTask = task.copyWith(isCompleted: !task.isCompleted);
+
+    await databaseService.updateTask(updatedTask);
+
+    if (updatedTask.isCompleted) {
+      await notificationService.cancelTaskNotification(updatedTask.id!);
+    } else {
+      await notificationService.scheduleTaskNotification(updatedTask);
+    }
+  }
+
+  Future<void> deleteTask(int id) async {
+    await databaseService.deleteTask(id);
+    await notificationService.cancelTaskNotification(id);
   }
 
   void _applySearchFilter() {
