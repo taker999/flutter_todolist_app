@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_todolist_app/core/constants/app_colors.dart';
 import 'package:flutter_todolist_app/core/constants/app_strings.dart';
 import 'package:flutter_todolist_app/core/widgets/custom_text_form_field.dart';
+import 'package:flutter_todolist_app/core/widgets/custom_text_widget.dart';
 import 'package:flutter_todolist_app/features/add_edit_task/controller/add_edit_task_controller.dart';
 import 'package:flutter_todolist_app/features/add_edit_task/view/widgets/due_date_time_section.dart';
 import 'package:flutter_todolist_app/features/add_edit_task/view/widgets/priority_section.dart';
@@ -15,7 +16,7 @@ class AddEditTaskPage extends GetView<AddEditTaskController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: CustomTextWidget(
           controller.isEditing
               ? AppStrings.editTaskAppBarTitle
               : AppStrings.addTaskAppBarTitle,
@@ -77,7 +78,7 @@ class AddEditTaskPage extends GetView<AddEditTaskController> {
 
               SizedBox(height: 25.h),
 
-              _buildButtons(),
+              _buildSaveButton(),
             ],
           ),
         ),
@@ -101,16 +102,15 @@ class AddEditTaskPage extends GetView<AddEditTaskController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                CustomTextWidget(
                   'Enable Reminder',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
                 ),
-                Text(
+                CustomTextWidget(
                   'Get notified 1 hour before due date',
-                  style: TextStyle(fontSize: 12.sp, color: AppColors.hintText),
+                  fontSize: 12.sp,
+                  color: AppColors.hintText,
                 ),
               ],
             ),
@@ -128,58 +128,35 @@ class AddEditTaskPage extends GetView<AddEditTaskController> {
     );
   }
 
-  Widget _buildButtons() {
-    return Column(
-      children: [
-        // Save Button
-        SizedBox(
-          width: double.infinity,
-          height: 40.h,
-          child: Obx(() {
-            final isLoading = controller.isLoading.value;
+  Widget _buildSaveButton() {
+    return SizedBox(
+      width: double.infinity,
+      height: 40.h,
+      child: Obx(() {
+        final isLoading = controller.isLoading.value;
 
-            return ElevatedButton.icon(
-              onPressed:
-                  isLoading
-                      ? null
-                      : () async {
-                        final isSaved = await controller.saveTask();
+        return ElevatedButton.icon(
+          onPressed:
+              isLoading
+                  ? null
+                  : () async {
+                    final isSaved = await controller.saveTask();
 
-                        if (isSaved) {
-                          Get.back();
-                        }
-                      },
-              icon: isLoading ? null : const Icon(Icons.save),
-              label:
-                  isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : Text(
-                        controller.isEditing
-                            ? AppStrings.updateButtonText
-                            : AppStrings.createButtonText,
-                      ),
-            );
-          }),
-        ),
-
-        // if (controller.isEditing) ...[
-        //   const SizedBox(height: 12),
-        //   SizedBox(
-        //     width: double.infinity,
-        //     height: 50,
-        //     child: OutlinedButton.icon(
-        //       onPressed: () => Get.back(),
-        //       icon: const Icon(Icons.cancel),
-        //       label: const Text('Cancel'),
-        //       style: OutlinedButton.styleFrom(
-        //         shape: RoundedRectangleBorder(
-        //           borderRadius: BorderRadius.circular(12),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ],
-      ],
+                    if (isSaved) {
+                      Get.back();
+                    }
+                  },
+          icon: isLoading ? null : const Icon(Icons.save),
+          label:
+              isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : CustomTextWidget(
+                    controller.isEditing
+                        ? AppStrings.updateButtonText
+                        : AppStrings.createButtonText,
+                  ),
+        );
+      }),
     );
   }
 }

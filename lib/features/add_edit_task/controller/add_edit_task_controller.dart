@@ -1,11 +1,16 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_todolist_app/core/models/task.dart';
 import 'package:flutter_todolist_app/core/services/database_service.dart';
+import 'package:flutter_todolist_app/core/services/notification_service.dart';
 import 'package:get/get.dart';
 
 class AddEditTaskController extends GetxController {
-  final DatabaseService _databaseService;
-  AddEditTaskController(this._databaseService);
+  final DatabaseService databaseService;
+  final NotificationService notificationService;
+  AddEditTaskController({
+    required this.databaseService,
+    required this.notificationService,
+  });
 
   final Task? task = Get.arguments is Task ? Get.arguments : null;
 
@@ -60,9 +65,16 @@ class AddEditTaskController extends GetxController {
 
     try {
       if (isEditing) {
-        await _databaseService.updateTask(newTask);
+        await databaseService.updateTask(newTask);
+        await notificationService.cancelTaskNotification(newTask.id!);
+        if (newTask.hasReminder && !newTask.isCompleted) {
+          await notificationService.scheduleTaskNotification(newTask);
+        }
       } else {
-        await _databaseService.createTask(newTask);
+        final createdTask = await databaseService.createTask(newTask);
+        if (newTask.hasReminder) {
+          await notificationService.scheduleTaskNotification(createdTask);
+        }
       }
 
       return true;

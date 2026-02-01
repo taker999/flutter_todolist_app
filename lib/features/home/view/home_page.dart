@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_todolist_app/core/constants/app_colors.dart';
 import 'package:flutter_todolist_app/core/constants/app_strings.dart';
+import 'package:flutter_todolist_app/core/enums/sort_by.dart';
 import 'package:flutter_todolist_app/core/routes/route_names.dart';
-import 'package:flutter_todolist_app/core/utils/priority_color.dart';
+import 'package:flutter_todolist_app/core/utils/get_priority_color.dart';
+import 'package:flutter_todolist_app/core/widgets/custom_text_widget.dart';
 import 'package:flutter_todolist_app/features/home/controller/home_controller.dart';
 import 'package:flutter_todolist_app/features/home/view/widgets/task_card.dart';
 import 'package:get/get.dart';
@@ -15,24 +17,29 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.homeAppBarTitle),
+        title: const CustomTextWidget(AppStrings.homeAppBarTitle),
         actions: [
           PopupMenuButton<String>(
             icon: const Icon(Icons.sort),
-            onSelected: (value) {},
+            onSelected: (value) {
+              SortBy sortBy = SortBy.values.byName(value);
+              controller.updateSortBy(sortBy);
+            },
             itemBuilder:
                 (context) => [
-                  const PopupMenuItem(
-                    value: 'date',
-                    child: Text(AppStrings.sortByDueDate),
+                  PopupMenuItem(
+                    value: SortBy.dueDate.name,
+                    child: const CustomTextWidget(AppStrings.sortByDueDate),
                   ),
-                  const PopupMenuItem(
-                    value: 'priority',
-                    child: Text(AppStrings.sortByPriority),
+                  PopupMenuItem(
+                    value: SortBy.priority.name,
+                    child: const CustomTextWidget(AppStrings.sortByPriority),
                   ),
-                  const PopupMenuItem(
-                    value: 'created',
-                    child: Text(AppStrings.sortByCreationDate),
+                  PopupMenuItem(
+                    value: SortBy.creationDate.name,
+                    child: const CustomTextWidget(
+                      AppStrings.sortByCreationDate,
+                    ),
                   ),
                 ],
           ),
@@ -93,14 +100,16 @@ class HomePage extends GetView<HomeController> {
         children: [
           Icon(Icons.task_alt, size: 80.r, color: AppColors.primaryGrey),
           SizedBox(height: 16.h),
-          Text(
+          CustomTextWidget(
             'No tasks found',
-            style: TextStyle(fontSize: 16.sp, color: AppColors.borderGrey),
+            fontSize: 16.sp,
+            color: AppColors.borderGrey,
           ),
           SizedBox(height: 4.h),
-          Text(
+          CustomTextWidget(
             'Tap + to add a new task',
-            style: TextStyle(fontSize: 14.sp, color: AppColors.primaryGrey),
+            fontSize: 14.sp,
+            color: AppColors.primaryGrey,
           ),
         ],
       ),

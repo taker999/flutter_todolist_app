@@ -1,20 +1,19 @@
 import 'package:flutter_todolist_app/core/models/task.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:uuid/uuid.dart';
 
 class DatabaseService extends GetxService {
   final Box<Task> taskBox;
-  final _uuid = const Uuid();
 
   DatabaseService({required this.taskBox});
 
   Future<Task> createTask(Task task) async {
-    final id = _uuid.v4();
-    final taskWithId = task.copyWith(id: id);
+    final key = await taskBox.add(task);
 
-    await taskBox.put(id, taskWithId);
-    return taskWithId;
+    final savedTask = task.copyWith(id: key);
+    await taskBox.put(key, savedTask);
+
+    return savedTask;
   }
 
   Task? readTask(String id) {

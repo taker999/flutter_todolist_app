@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_todolist_app/core/constants/app_colors.dart';
+import 'package:flutter_todolist_app/core/widgets/custom_text_widget.dart';
 import 'package:flutter_todolist_app/features/add_edit_task/controller/add_edit_task_controller.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -42,14 +43,16 @@ class DueDateTimeSection extends GetView<AddEditTaskController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        CustomTextWidget(
           'Due Date & Time',
-          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+          fontSize: 16.sp,
+          fontWeight: FontWeight.bold,
         ),
         SizedBox(height: 12.h),
         InkWell(
           onTap: () => _selectDateTime(context),
-          child: Container(
+          borderRadius: BorderRadius.circular(12.r),
+          child: Ink(
             padding: EdgeInsets.all(16.w),
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.borderGrey),
@@ -66,19 +69,15 @@ class DueDateTimeSection extends GetView<AddEditTaskController> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        CustomTextWidget(
                           DateFormat('EEEE, MMMM dd, yyyy').format(dateTime),
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
                         ),
-                        Text(
+                        CustomTextWidget(
                           DateFormat('hh:mm a').format(dateTime),
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: AppColors.hintText,
-                          ),
+                          fontSize: 12.sp,
+                          color: AppColors.hintText,
                         ),
                       ],
                     );

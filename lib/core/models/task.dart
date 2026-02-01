@@ -4,9 +4,9 @@ import 'package:hive/hive.dart';
 part 'task.g.dart';
 
 @HiveType(typeId: 0)
-class Task {
+class Task extends HiveObject {
   @HiveField(0)
-  String? id;
+  final int? id;
 
   @HiveField(1)
   final String title;
@@ -41,7 +41,7 @@ class Task {
   }) : createdAt = createdAt ?? DateTime.now();
 
   Task copyWith({
-    String? id,
+    int? id,
     String? title,
     String? description,
     int? priority,

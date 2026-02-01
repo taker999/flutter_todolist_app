@@ -39,6 +39,8 @@ class AppTheme {
         backgroundColor: AppColors.primaryBLue,
         foregroundColor: AppColors.primaryWhite,
         iconColor: AppColors.primaryWhite,
+        iconSize: 16.r,
+        textStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
       ),
     ),
   );

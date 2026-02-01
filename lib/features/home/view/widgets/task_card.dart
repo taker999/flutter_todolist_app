@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_todolist_app/core/constants/app_colors.dart';
 import 'package:flutter_todolist_app/core/models/task.dart';
 import 'package:flutter_todolist_app/core/routes/route_names.dart';
+import 'package:flutter_todolist_app/core/widgets/custom_text_widget.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -39,16 +40,13 @@ class TaskCard extends StatelessWidget {
                 children: [
                   // Task Title
                   Expanded(
-                    child: Text(
+                    child: CustomTextWidget(
                       task.title,
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                        decoration:
-                            task.isCompleted
-                                ? TextDecoration.lineThrough
-                                : null,
-                      ),
+                      maxLines: 1,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                      decoration:
+                          task.isCompleted ? TextDecoration.lineThrough : null,
                     ),
                   ),
 
@@ -65,11 +63,11 @@ class TaskCard extends StatelessWidget {
               ),
 
               // Task Description
-              Text(
+              CustomTextWidget(
                 task.description,
                 maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w400,
               ),
 
               SizedBox(height: 8.h),
@@ -83,16 +81,14 @@ class TaskCard extends StatelessWidget {
                     color: task.isOverdue ? Colors.red : Colors.grey,
                   ),
                   SizedBox(width: 4.w),
-                  Text(
+                  CustomTextWidget(
                     DateFormat('MMM dd, yyyy HH:mm').format(task.dueDate),
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color:
-                          task.isOverdue
-                              ? AppColors.primaryRed
-                              : AppColors.hintText,
-                      fontWeight: task.isOverdue ? FontWeight.bold : null,
-                    ),
+                    fontSize: 12.sp,
+                    color:
+                        task.isOverdue
+                            ? AppColors.primaryRed
+                            : AppColors.hintText,
+                    fontWeight: task.isOverdue ? FontWeight.bold : null,
                   ),
                   SizedBox(width: 8.w),
                   if (task.isOverdue)
@@ -135,7 +131,7 @@ class TaskCard extends StatelessWidget {
     Color? backgroundColor,
   }) {
     return Chip(
-      label: Text(label),
+      label: CustomTextWidget(label),
       visualDensity: VisualDensity.compact,
       labelStyle: TextStyle(color: textColor, fontSize: fontSize),
       padding: backgroundColor == null ? EdgeInsets.all(2.w) : EdgeInsets.zero,
@@ -157,7 +153,7 @@ class TaskCard extends StatelessWidget {
                 children: [
                   Icon(Icons.edit, size: 20.r),
                   SizedBox(width: 8.w),
-                  const Text('Edit'),
+                  const CustomTextWidget('Edit'),
                 ],
               ),
               onTap: () {},
@@ -167,10 +163,7 @@ class TaskCard extends StatelessWidget {
                 children: [
                   Icon(Icons.delete, size: 20.r, color: AppColors.primaryRed),
                   SizedBox(width: 8.w),
-                  const Text(
-                    'Delete',
-                    style: TextStyle(color: AppColors.primaryRed),
-                  ),
+                  const CustomTextWidget('Delete', color: AppColors.primaryRed),
                 ],
               ),
               onTap: () {},
