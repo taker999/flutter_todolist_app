@@ -22,6 +22,7 @@ A comprehensive Flutter task management application with priority levels, remind
 **State Management**: GetX  
 **Database**: Hive  
 **Notifications**: Flutter Local Notifications
+**Responsive**: ScreenUtil
 
 ## 🚀 Quick Start
 
