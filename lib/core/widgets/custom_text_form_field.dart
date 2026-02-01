@@ -6,6 +6,8 @@ class CustomTextFormField extends StatelessWidget {
   final String hint;
   final IconData prefixIcon;
   final int maxLines;
+  final double? fontSize;
+  final FontWeight? fontWeight;
   final String? Function(String?)? validator;
 
   const CustomTextFormField({
@@ -15,6 +17,8 @@ class CustomTextFormField extends StatelessWidget {
     required this.hint,
     required this.prefixIcon,
     this.maxLines = 1,
+    this.fontSize,
+    this.fontWeight,
     this.validator,
   });
 
@@ -23,6 +27,7 @@ class CustomTextFormField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       maxLines: maxLines,
+      style: TextStyle(fontSize: fontSize, fontWeight: fontWeight),
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,

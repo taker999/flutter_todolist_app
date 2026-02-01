@@ -1,4 +1,4 @@
-import 'package:flutter_todolist_app/core/enums/priority.dart';
+import 'package:flutter_todolist_app/core/enums/priority_level.dart';
 import 'package:hive/hive.dart';
 
 part 'task.g.dart';
@@ -66,13 +66,13 @@ class Task extends HiveObject {
   String get priorityText {
     switch (priority) {
       case 1:
-        return Priority.high.name.toUpperCase();
+        return PriorityLevel.high.name.toUpperCase();
       case 2:
-        return Priority.medium.name.toUpperCase();
+        return PriorityLevel.medium.name.toUpperCase();
       case 3:
-        return Priority.low.name.toUpperCase();
+        return PriorityLevel.low.name.toUpperCase();
       default:
-        return Priority.medium.name.toUpperCase();
+        return PriorityLevel.medium.name.toUpperCase();
     }
   }
 

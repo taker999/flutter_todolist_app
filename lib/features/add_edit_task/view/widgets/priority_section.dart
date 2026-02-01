@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_todolist_app/core/constants/app_colors.dart';
+import 'package:flutter_todolist_app/core/constants/app_strings.dart';
+import 'package:flutter_todolist_app/core/enums/priority_level.dart';
 import 'package:flutter_todolist_app/core/widgets/custom_text_widget.dart';
 import 'package:flutter_todolist_app/features/add_edit_task/controller/add_edit_task_controller.dart';
 import 'package:get/get.dart';
@@ -14,7 +16,7 @@ class PrioritySection extends GetView<AddEditTaskController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomTextWidget(
-          'Priority Level',
+          AppStrings.priorityLevelHeader,
           fontSize: 16.sp,
           fontWeight: FontWeight.bold,
         ),
@@ -25,29 +27,35 @@ class PrioritySection extends GetView<AddEditTaskController> {
             children: [
               Expanded(
                 child: _buildPriorityChip(
-                  label: 'High',
-                  priority: 1,
+                  label: PriorityLevel.high.name,
+                  priority: PriorityLevel.high.index + 1,
                   color: AppColors.primaryRed,
                   icon: Icons.priority_high,
-                  isSelected: controller.selectedPriority.value == 1,
+                  isSelected:
+                      controller.selectedPriority.value ==
+                      PriorityLevel.high.index + 1,
                 ),
               ),
               Expanded(
                 child: _buildPriorityChip(
-                  label: 'Medium',
-                  priority: 2,
+                  label: PriorityLevel.medium.name,
+                  priority: PriorityLevel.medium.index + 1,
                   color: AppColors.primaryOrange,
                   icon: Icons.remove,
-                  isSelected: controller.selectedPriority.value == 2,
+                  isSelected:
+                      controller.selectedPriority.value ==
+                      PriorityLevel.medium.index + 1,
                 ),
               ),
               Expanded(
                 child: _buildPriorityChip(
-                  label: 'Low',
-                  priority: 3,
+                  label: PriorityLevel.low.name,
+                  priority: PriorityLevel.low.index + 1,
                   color: AppColors.primaryGreen,
                   icon: Icons.arrow_downward,
-                  isSelected: controller.selectedPriority.value == 3,
+                  isSelected:
+                      controller.selectedPriority.value ==
+                      PriorityLevel.low.index + 1,
                 ),
               ),
             ],
@@ -72,7 +80,8 @@ class PrioritySection extends GetView<AddEditTaskController> {
       child: Ink(
         padding: EdgeInsets.symmetric(vertical: 12.h),
         decoration: BoxDecoration(
-          color: isSelected ? color.withValues(alpha: 0.2) : AppColors.lightGrey,
+          color:
+              isSelected ? color.withValues(alpha: 0.2) : AppColors.lightGrey,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
             color: isSelected ? color : AppColors.borderGreyLight,
@@ -84,7 +93,7 @@ class PrioritySection extends GetView<AddEditTaskController> {
             Icon(icon, color: isSelected ? color : AppColors.primaryGrey),
             SizedBox(height: 4.h),
             CustomTextWidget(
-              label,
+              label.toUpperCase(),
               fontSize: 12.sp,
               fontWeight: isSelected ? FontWeight.w700 : FontWeight.normal,
               color: isSelected ? color : AppColors.borderGrey,

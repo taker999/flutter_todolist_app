@@ -18,4 +18,6 @@ class AppColors {
   static final borderGreyLight = Colors.grey.shade300;
 
   static const hintText = Color(0xFF615B5B);
+
+  static final blueBackground = Colors.blue.shade50;
 }

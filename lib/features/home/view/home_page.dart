@@ -27,68 +27,108 @@ class HomePage extends GetView<HomeController> {
             },
             itemBuilder:
                 (context) => [
-                  PopupMenuItem(
+                  _buildPopupMenuItem(
                     value: SortBy.dueDate.name,
-                    child: const CustomTextWidget(AppStrings.sortByDueDate),
+                    text: AppStrings.sortByDueDate,
+                    isSelected: controller.sortBy.value == SortBy.dueDate,
                   ),
-                  PopupMenuItem(
+                  _buildPopupMenuItem(
                     value: SortBy.priority.name,
-                    child: const CustomTextWidget(AppStrings.sortByPriority),
+                    text: AppStrings.sortByPriority,
+                    isSelected: controller.sortBy.value == SortBy.priority,
                   ),
-                  PopupMenuItem(
+                  _buildPopupMenuItem(
                     value: SortBy.creationDate.name,
-                    child: const CustomTextWidget(
-                      AppStrings.sortByCreationDate,
-                    ),
+                    text: AppStrings.sortByCreationDate,
+                    isSelected: controller.sortBy.value == SortBy.creationDate,
                   ),
                 ],
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // Search Bar
-          Padding(
-            padding: EdgeInsets.all(12.w),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: AppStrings.searchTasksHint,
-                prefixIcon: const Icon(Icons.search),
-                filled: true,
-                fillColor: AppColors.lightGrey,
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () => controller.searchFocusNode.unfocus(),
+        child: Obx(
+          () => Column(
+            children: [
+              // Search Bar
+              Padding(
+                padding: EdgeInsets.all(12.w),
+                child: TextField(
+                  controller: controller.searchController,
+                  focusNode: controller.searchFocusNode,
+                  decoration: InputDecoration(
+                    hintText: AppStrings.searchTasksHint,
+                    prefixIcon: const Icon(Icons.search),
+                    filled: true,
+                    fillColor: AppColors.lightGrey,
+                    suffixIcon:
+                        controller.isSearching
+                            ? IconButton(
+                              onPressed: () {
+                                controller.clearSearchQuery();
+                                FocusScope.of(context).unfocus();
+                              },
+                              icon: const Icon(Icons.close),
+                            )
+                            : null,
+                  ),
+                  onChanged: (value) {
+                    controller.updateSearchQuery(value);
+                  },
+                ),
               ),
-              onChanged: (value) {
-                controller.updateSearchQuery(value);
-              },
-            ),
-          ),
 
-          // Task List
-          Expanded(
-            child: Obx(() {
-              if (controller.filteredTasks.isEmpty) {
-                return _buildEmptyState();
-              }
-
-              return ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: controller.filteredTasks.length,
-                itemBuilder: (context, index) {
-                  final task = controller.filteredTasks[index];
-                  return TaskCard(
-                    task: task,
-                    priorityColor: getPriorityColor(task.priority),
-                  );
-                },
-              );
-            }),
+              // Task List
+              Expanded(
+                child:
+                    controller.filteredTasks.isEmpty
+                        ? _buildEmptyState()
+                        : ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          itemCount: controller.filteredTasks.length,
+                          itemBuilder: (context, index) {
+                            final task = controller.filteredTasks[index];
+                            return TaskCard(
+                              key: ValueKey(task.id),
+                              task: task,
+                              priorityColor: getPriorityColor(task.priority),
+                            );
+                          },
+                        ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Get.toNamed(RouteNames.addEditTask),
+        onPressed: () {
+          controller.searchFocusNode.unfocus();
+          Get.toNamed(RouteNames.addEditTask);
+        },
         icon: const Icon(Icons.add),
-        label: const Text(AppStrings.addTaskFloatingActionButtonText),
+        label: const CustomTextWidget(
+          AppStrings.addTaskFloatingActionButtonText,
+        ),
+      ),
+    );
+  }
+
+  PopupMenuItem<String> _buildPopupMenuItem({
+    required String value,
+    required String text,
+    required bool isSelected,
+  }) {
+    return PopupMenuItem(
+      value: value,
+      child: Row(
+        children: [
+          if (isSelected) ...[const Icon(Icons.done), SizedBox(width: 4.w)],
+          CustomTextWidget(text),
+        ],
       ),
     );
   }
@@ -101,13 +141,13 @@ class HomePage extends GetView<HomeController> {
           Icon(Icons.task_alt, size: 80.r, color: AppColors.primaryGrey),
           SizedBox(height: 16.h),
           CustomTextWidget(
-            'No tasks found',
+            AppStrings.noTasks,
             fontSize: 16.sp,
             color: AppColors.borderGrey,
           ),
           SizedBox(height: 4.h),
           CustomTextWidget(
-            'Tap + to add a new task',
+            AppStrings.addNewTask,
             fontSize: 14.sp,
             color: AppColors.primaryGrey,
           ),

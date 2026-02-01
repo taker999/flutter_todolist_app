@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_todolist_app/core/constants/app_colors.dart';
+import 'package:flutter_todolist_app/core/constants/app_strings.dart';
 import 'package:flutter_todolist_app/core/models/task.dart';
 import 'package:flutter_todolist_app/core/routes/route_names.dart';
 import 'package:flutter_todolist_app/core/widgets/custom_text_widget.dart';
@@ -24,11 +25,12 @@ class TaskCard extends GetView<HomeController> {
         side: BorderSide(
           color:
               task.isOverdue ? AppColors.primaryRed : AppColors.borderBlueLight,
-          width: 2,
+          width: 2.w,
         ),
       ),
       child: InkWell(
         onTap: () {
+          controller.searchFocusNode.unfocus();
           Get.toNamed(RouteNames.addEditTask, arguments: task);
         },
         borderRadius: BorderRadius.circular(12.r),
@@ -76,49 +78,7 @@ class TaskCard extends GetView<HomeController> {
               SizedBox(height: 8.h),
 
               // Due Date and Reminder Info
-              Row(
-                children: [
-                  Icon(
-                    Icons.calendar_today,
-                    size: 14.sp,
-                    color: task.isOverdue ? Colors.red : Colors.grey,
-                  ),
-                  SizedBox(width: 4.w),
-                  CustomTextWidget(
-                    DateFormat('MMM dd, yyyy HH:mm').format(task.dueDate),
-                    fontSize: 12.sp,
-                    color:
-                        task.isOverdue
-                            ? AppColors.primaryRed
-                            : AppColors.hintText,
-                    fontWeight: task.isOverdue ? FontWeight.bold : null,
-                  ),
-                  SizedBox(width: 8.w),
-                  if (task.isOverdue)
-                    _buildChip(
-                      label: 'OVERDUE',
-                      fontSize: 10.sp,
-                      textColor: AppColors.primaryWhite,
-                      backgroundColor: AppColors.primaryRed,
-                    ),
-                  if (task.isDueSoon)
-                    _buildChip(
-                      label: 'DUE SOON',
-                      fontSize: 10.sp,
-                      textColor: AppColors.primaryWhite,
-                      backgroundColor: AppColors.primaryOrange,
-                    ),
-                  if (task.hasReminder)
-                    Padding(
-                      padding: EdgeInsets.only(left: 15.h),
-                      child: Icon(
-                        Icons.notifications_active,
-                        size: 16.r,
-                        color: Colors.blue[700],
-                      ),
-                    ),
-                ],
-              ),
+              _buildDueDateAndReminder(),
             ],
           ),
         ),
@@ -147,6 +107,47 @@ class TaskCard extends GetView<HomeController> {
     );
   }
 
+  Widget _buildDueDateAndReminder() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Row(
+          children: [
+            Icon(
+              Icons.calendar_today,
+              size: 14.sp,
+              color: task.isOverdue ? Colors.red : Colors.grey,
+            ),
+            SizedBox(width: 4.w),
+            CustomTextWidget(
+              DateFormat('MMM dd, yyyy HH:mm').format(task.dueDate),
+              fontSize: 12.sp,
+              color: task.isOverdue ? AppColors.primaryRed : AppColors.hintText,
+              fontWeight: task.isOverdue ? FontWeight.bold : null,
+            ),
+            SizedBox(width: 8.w),
+            if (task.isOverdue)
+              _buildChip(
+                label: AppStrings.overdue,
+                fontSize: 10.sp,
+                textColor: AppColors.primaryWhite,
+                backgroundColor: AppColors.primaryRed,
+              ),
+            if (task.isDueSoon)
+              _buildChip(
+                label: AppStrings.dueSoon,
+                fontSize: 10.sp,
+                textColor: AppColors.primaryWhite,
+                backgroundColor: AppColors.primaryOrange,
+              ),
+          ],
+        ),
+        if (task.hasReminder) const Icon(Icons.notifications_active),
+        if (!task.hasReminder) const SizedBox.shrink(),
+      ],
+    );
+  }
+
   Widget _buildPopupMenuOptions() {
     return PopupMenuButton(
       itemBuilder:
@@ -158,8 +159,8 @@ class TaskCard extends GetView<HomeController> {
                   SizedBox(width: 8.w),
                   CustomTextWidget(
                     task.isCompleted
-                        ? 'Mark as Incomplete'
-                        : 'Mark as Completed',
+                        ? AppStrings.markAsIncomplete
+                        : AppStrings.markAsCompleted,
                   ),
                 ],
               ),
@@ -172,7 +173,10 @@ class TaskCard extends GetView<HomeController> {
                 children: [
                   Icon(Icons.delete, size: 20.r, color: AppColors.primaryRed),
                   SizedBox(width: 8.w),
-                  const CustomTextWidget('Delete', color: AppColors.primaryRed),
+                  const CustomTextWidget(
+                    AppStrings.deleteTask,
+                    color: AppColors.primaryRed,
+                  ),
                 ],
               ),
               onTap: () {

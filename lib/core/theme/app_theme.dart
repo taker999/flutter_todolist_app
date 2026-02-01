@@ -10,6 +10,7 @@ class AppTheme {
     useMaterial3: true,
     appBarTheme: AppBarTheme(
       elevation: 2,
+      foregroundColor: AppColors.primaryBLue,
       titleTextStyle: TextStyle(
         color: AppColors.primaryBLue,
         fontSize: 20.sp,
@@ -27,10 +28,22 @@ class AppTheme {
         borderRadius: BorderRadius.circular(12.r),
         borderSide: BorderSide(color: AppColors.primaryBLue, width: 2.w),
       ),
-      labelStyle: const TextStyle(color: Colors.blueGrey),
-      hintStyle: const TextStyle(color: AppColors.hintText),
+      labelStyle: TextStyle(color: Colors.blueGrey, fontSize: 18.sp),
+      hintStyle: TextStyle(
+        color: AppColors.hintText,
+        fontSize: 18.sp,
+        fontWeight: FontWeight.normal,
+      ),
+      errorStyle: TextStyle(fontSize: 14.sp),
+      prefixIconColor: AppColors.primaryBLue,
     ),
     iconTheme: IconThemeData(color: AppColors.primaryBLue, size: 23.r),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      extendedTextStyle: TextStyle(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(

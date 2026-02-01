@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_todolist_app/core/constants/app_colors.dart';
+import 'package:flutter_todolist_app/core/constants/app_strings.dart';
 import 'package:flutter_todolist_app/core/widgets/custom_text_widget.dart';
 import 'package:flutter_todolist_app/features/add_edit_task/controller/add_edit_task_controller.dart';
 import 'package:get/get.dart';
@@ -44,7 +45,7 @@ class DueDateTimeSection extends GetView<AddEditTaskController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomTextWidget(
-          'Due Date & Time',
+          AppStrings.dueDateAndTimeHeader,
           fontSize: 16.sp,
           fontWeight: FontWeight.bold,
         ),

@@ -22,64 +22,73 @@ class AddEditTaskPage extends GetView<AddEditTaskController> {
               : AppStrings.addTaskAppBarTitle,
         ),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(12.w),
-        child: Form(
-          key: controller.formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Title Field
-              CustomTextFormField(
-                controller: controller.titleController,
-                label: AppStrings.taskTitleLabel,
-                hint: AppStrings.taskTitleHint,
-                prefixIcon: Icons.title,
-                maxLines: 3,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return AppStrings.titleValidationText;
-                  }
-                  return null;
-                },
-              ),
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(12.w),
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Form(
+            key: controller.formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Title Field
+                CustomTextFormField(
+                  controller: controller.titleController,
+                  label: AppStrings.taskTitleLabel,
+                  hint: AppStrings.taskTitleHint,
+                  prefixIcon: Icons.title,
+                  maxLines: 3,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return AppStrings.titleValidationText;
+                    }
+                    return null;
+                  },
+                ),
 
-              SizedBox(height: 16.h),
+                SizedBox(height: 16.h),
 
-              // Description Field
-              CustomTextFormField(
-                controller: controller.descriptionController,
-                label: AppStrings.taskDescriptionLabel,
-                hint: AppStrings.taskDescriptionHint,
-                prefixIcon: Icons.description,
-                maxLines: 6,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return AppStrings.descriptionValidationText;
-                  }
-                  return null;
-                },
-              ),
+                // Description Field
+                CustomTextFormField(
+                  controller: controller.descriptionController,
+                  label: AppStrings.taskDescriptionLabel,
+                  hint: AppStrings.taskDescriptionHint,
+                  prefixIcon: Icons.description,
+                  maxLines: 6,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w400,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return AppStrings.descriptionValidationText;
+                    }
+                    return null;
+                  },
+                ),
 
-              SizedBox(height: 20.h),
+                SizedBox(height: 20.h),
 
-              // Priority Section
-              const PrioritySection(),
+                // Priority Section
+                const PrioritySection(),
 
-              SizedBox(height: 20.h),
+                SizedBox(height: 20.h),
 
-              // Due Date Section
-              const DueDateTimeSection(),
+                // Due Date Section
+                const DueDateTimeSection(),
 
-              SizedBox(height: 20.h),
+                SizedBox(height: 20.h),
 
-              // Reminder Section
-              _buildReminderSection(),
+                // Reminder Section
+                _buildReminderSection(),
 
-              SizedBox(height: 25.h),
+                SizedBox(height: 25.h),
 
-              _buildSaveButton(),
-            ],
+                _buildSaveButton(),
+              ],
+            ),
           ),
         ),
       ),
@@ -90,9 +99,9 @@ class AddEditTaskPage extends GetView<AddEditTaskController> {
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: Colors.blue.shade50,
+        color: AppColors.blueBackground,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: Colors.blue.shade200),
+        border: Border.all(color: AppColors.borderBlueLight),
       ),
       child: Row(
         children: [
@@ -103,12 +112,12 @@ class AddEditTaskPage extends GetView<AddEditTaskController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomTextWidget(
-                  'Enable Reminder',
+                  AppStrings.enableReminderTitle,
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                 ),
                 CustomTextWidget(
-                  'Get notified 1 hour before due date',
+                  AppStrings.getNotifiedSubtitle,
                   fontSize: 12.sp,
                   color: AppColors.hintText,
                 ),
